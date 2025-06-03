@@ -3,11 +3,12 @@
 MainFrame::MainFrame(const wxString &title) : wxFrame(nullptr, wxID_ANY, title)
 {
     SetupMenus();
+    CreateControls();
 }
 
 void MainFrame::SetupMenus()
 {
-    auto* menuBar = new wxMenuBar;
+    auto *menuBar = new wxMenuBar;
 
     auto fileMenu = new wxMenu;
     fileMenu->Append(wxID_NEW);
@@ -45,4 +46,48 @@ void MainFrame::SetupMenus()
     menuBar->Append(helpMenu, "Help");
 
     SetMenuBar(menuBar);
+}
+
+void MainFrame::CreateControls()
+{
+    auto mainSizer = new wxBoxSizer(wxVERTICAL);
+
+    m_splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE);
+
+    m_editor = new CodeEditor(m_splitter);
+
+    m_outputPanel = new wxPanel(m_splitter);
+    auto outputSizer = new wxBoxSizer(wxVERTICAL);
+
+    auto outputCtrlSizer = new wxBoxSizer(wxHORIZONTAL);
+
+    auto outputLabel = new wxStaticText(m_outputPanel, wxID_ANY, "Output");
+    m_closeOutputButton = new wxButton(m_outputPanel, wxID_ANY, "Close");
+
+    outputCtrlSizer->Add(outputLabel, 0, wxALIGN_CENTER_VERTICAL);
+    outputCtrlSizer->AddStretchSpacer();
+    outputCtrlSizer->Add(m_closeOutputButton);
+
+    m_outputArea = new wxTextCtrl(m_outputPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                                  wxTE_MULTILINE | wxTE_READONLY);
+
+    outputSizer->Add(outputCtrlSizer, 0, wxEXPAND);
+    outputSizer->Add(m_outputArea, 1, wxEXPAND);
+
+    m_outputPanel->SetSizer(outputSizer);
+
+    // Hide the output panel on startup.
+    m_splitter->Initialize(m_editor);
+    m_outputPanel->Hide(); // Ensure that the output panel is completely invisible
+
+    mainSizer->Add(m_splitter, 1, wxEXPAND | wxALL, 4);
+
+    SetSizer(mainSizer);
+
+    // Change the window's background color to match the color of the editor and wxWidgets panels.
+    auto bgColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    SetBackgroundColour(bgColor);
+
+    SetClientSize(1280, 720);
+    SetMinClientSize(wxSize(800, 600));
 }

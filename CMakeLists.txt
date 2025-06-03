@@ -4,7 +4,7 @@ project(CppScripter)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(wxWidgets REQUIRED COMPONENTS core base)
+find_package(wxWidgets REQUIRED COMPONENTS core base stc)
 include(${wxWidgets_USE_FILE})
 
 add_executable(${PROJECT_NAME} WIN32
@@ -12,6 +12,8 @@ add_executable(${PROJECT_NAME} WIN32
         src/App.h
         src/MainFrame.cpp
         src/MainFrame.h
+        src/CodeEditor.cpp
+        src/CodeEditor.h
 )
 
 target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
