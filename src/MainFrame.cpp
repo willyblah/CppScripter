@@ -52,7 +52,8 @@ void MainFrame::CreateControls()
 {
     auto mainSizer = new wxBoxSizer(wxVERTICAL);
 
-    m_splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE);
+    m_splitter =
+        new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE);
 
     m_editor = new CodeEditor(m_splitter);
 
@@ -68,8 +69,8 @@ void MainFrame::CreateControls()
     outputCtrlSizer->AddStretchSpacer();
     outputCtrlSizer->Add(m_closeOutputButton);
 
-    m_outputArea = new wxTextCtrl(m_outputPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                                  wxTE_MULTILINE | wxTE_READONLY);
+    m_outputArea = new wxTextCtrl(m_outputPanel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                  wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
 
     outputSizer->Add(outputCtrlSizer, 0, wxEXPAND);
     outputSizer->Add(m_outputArea, 1, wxEXPAND);

@@ -9,7 +9,7 @@
 class MainFrame : public wxFrame
 {
 public:
-    explicit MainFrame(const wxString& title);
+    explicit MainFrame(const wxString &title);
 
 private:
     // ---- IDs for menus ----
@@ -25,11 +25,11 @@ private:
 
     // ---- Controls ----
 
-    wxSplitterWindow* m_splitter;
-    CodeEditor* m_editor;
-    wxPanel* m_outputPanel;
-    wxButton* m_closeOutputButton;
-    wxTextCtrl* m_outputArea;
+    wxSplitterWindow *m_splitter;
+    CodeEditor *m_editor;
+    wxPanel *m_outputPanel;
+    wxButton *m_closeOutputButton;
+    wxTextCtrl *m_outputArea;
 
     // ---- UI-related methods ----
 
