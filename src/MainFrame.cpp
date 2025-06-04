@@ -1,9 +1,13 @@
 #include "MainFrame.h"
 
+#include <wx/config.h>
+
 MainFrame::MainFrame(const wxString &title) : wxFrame(nullptr, wxID_ANY, title)
 {
     SetupMenus();
     CreateControls();
+    BindEventHandlers();
+    LoadSettings();
 }
 
 void MainFrame::SetupMenus()
@@ -89,6 +93,51 @@ void MainFrame::CreateControls()
     auto bgColor = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
     SetBackgroundColour(bgColor);
 
-    SetClientSize(1280, 720);
     SetMinClientSize(wxSize(800, 600));
+}
+
+void MainFrame::BindEventHandlers()
+{
+    Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnClose, this);
+}
+
+void MainFrame::OnClose(wxCloseEvent &event)
+{
+    SaveSettings();
+    event.Skip();
+}
+
+void MainFrame::LoadSettings()
+{
+    wxConfigBase* config = wxConfig::Get();
+
+    int x = config->ReadLong("/Window/X", -1);
+    int y = config->ReadLong("/Window/Y", -1);
+    int w = config->ReadLong("/Window/Width", 1280);
+    int h = config->ReadLong("/Window/Height", 720);
+
+    if (x != -1 && y != -1)
+        SetPosition(wxPoint(x, y));
+    SetSize(w, h);
+
+    if (bool maximized = config->ReadBool("/Window/Maximized", false))
+        Maximize();
+}
+
+void MainFrame::SaveSettings()
+{
+    wxConfigBase* config = wxConfig::Get();
+
+    if (!IsMaximized())
+    {
+        const wxRect rect = GetRect();
+        config->Write("/Window/X", static_cast<long>(rect.x));
+        config->Write("/Window/Y", static_cast<long>(rect.y));
+        config->Write("/Window/Width", static_cast<long>(rect.width));
+        config->Write("/Window/Height", static_cast<long>(rect.height));
+    }
+
+    config->Write("/Window/Maximized", IsMaximized());
+
+    config->Flush();
 }

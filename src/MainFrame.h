@@ -35,6 +35,16 @@ private:
 
     void SetupMenus();
     void CreateControls();
+    void BindEventHandlers();
+
+    // ---- Event handlers ----
+
+    void OnClose(wxCloseEvent &event);
+
+    // ---- Other methods ----
+
+    void LoadSettings();
+    void SaveSettings();
 };
 
 #endif // MAINFRAME_H
