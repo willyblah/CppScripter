@@ -8,6 +8,12 @@ class CodeEditor : public wxStyledTextCtrl
 {
 public:
     explicit CodeEditor(wxWindow *parent);
+
+    void UpdateMarginWidth();
+
+private:
+    void SetupStyle();
+    void SetupSyntaxHighlighting();
 };
 
 #endif // CODEEDITOR_H

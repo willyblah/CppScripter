@@ -8,6 +8,9 @@ MainFrame::MainFrame(const wxString &title) : wxFrame(nullptr, wxID_ANY, title)
     CreateControls();
     BindEventHandlers();
     LoadSettings();
+
+    for (int i = 0; i < 2500; i++)
+        m_editor->AppendText("\n");
 }
 
 void MainFrame::SetupMenus()
@@ -122,6 +125,22 @@ void MainFrame::LoadSettings()
 
     if (bool maximized = config->ReadBool("/Window/Maximized", false))
         Maximize();
+
+    wxString editorFontDesc;
+    if (config->Read("/Editor/Font", &editorFontDesc))
+    {
+        wxFont editorFont;
+        editorFont.SetNativeFontInfo(editorFontDesc);
+        m_editor->StyleSetFont(wxSTC_STYLE_DEFAULT, editorFont);
+        m_editor->StyleSetFont(wxSTC_STYLE_LINENUMBER, editorFont);
+    }
+    else
+    {
+        wxFont editorFont(wxFontInfo(10).FaceName("Consolas"));
+        m_editor->StyleSetFont(wxSTC_STYLE_DEFAULT, editorFont);
+        m_editor->StyleSetFont(wxSTC_STYLE_LINENUMBER, editorFont);
+    }
+    m_editor->UpdateMarginWidth();
 }
 
 void MainFrame::SaveSettings()
@@ -138,6 +157,9 @@ void MainFrame::SaveSettings()
     }
 
     config->Write("/Window/Maximized", IsMaximized());
+
+    wxFont editorFont = m_editor->StyleGetFont(wxSTC_STYLE_DEFAULT);
+    config->Write("/Editor/Font", editorFont.GetNativeFontInfoDesc());
 
     config->Flush();
 }
