@@ -101,7 +101,27 @@ void MainFrame::CreateControls()
 
 void MainFrame::BindEventHandlers()
 {
+    Bind(wxEVT_MENU, [this](wxCommandEvent &) { m_editor->Undo(); }, wxID_UNDO);
+    Bind(wxEVT_MENU, [this](wxCommandEvent &) { m_editor->Redo(); }, wxID_REDO);
+    Bind(wxEVT_MENU, [this](wxCommandEvent &) { m_editor->Cut(); }, wxID_CUT);
+    Bind(wxEVT_MENU, [this](wxCommandEvent &) { m_editor->Copy(); }, wxID_COPY);
+    Bind(wxEVT_MENU, [this](wxCommandEvent &) { m_editor->Paste(); }, wxID_PASTE);
+    Bind(wxEVT_MENU, [this](wxCommandEvent &) { m_editor->SelectAll(); }, wxID_SELECTALL);
+
+    Bind(wxEVT_UPDATE_UI, &MainFrame::OnUpdateUI, this);
+
     Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnClose, this);
+}
+
+void MainFrame::OnUpdateUI(wxUpdateUIEvent &event)
+{
+    wxMenuBar* menuBar = GetMenuBar();
+
+    menuBar->Enable(wxID_UNDO, m_editor->CanUndo());
+    menuBar->Enable(wxID_REDO, m_editor->CanRedo());
+    menuBar->Enable(wxID_CUT, m_editor->CanCut());
+    menuBar->Enable(wxID_COPY, m_editor->CanCopy());
+    menuBar->Enable(wxID_PASTE, m_editor->CanPaste());
 }
 
 void MainFrame::OnClose(wxCloseEvent &event)
@@ -112,7 +132,7 @@ void MainFrame::OnClose(wxCloseEvent &event)
 
 void MainFrame::LoadSettings()
 {
-    wxConfigBase* config = wxConfig::Get();
+    wxConfigBase *config = wxConfig::Get();
 
     int x = config->ReadLong("/Window/X", -1);
     int y = config->ReadLong("/Window/Y", -1);
@@ -145,7 +165,7 @@ void MainFrame::LoadSettings()
 
 void MainFrame::SaveSettings()
 {
-    wxConfigBase* config = wxConfig::Get();
+    wxConfigBase *config = wxConfig::Get();
 
     if (!IsMaximized())
     {

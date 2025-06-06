@@ -39,6 +39,8 @@ private:
 
     // ---- Event handlers ----
 
+    void OnUpdateUI(wxUpdateUIEvent& event);
+
     void OnClose(wxCloseEvent &event);
 
     // ---- Other methods ----
