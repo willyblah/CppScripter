@@ -8,9 +8,6 @@ MainFrame::MainFrame(const wxString &title) : wxFrame(nullptr, wxID_ANY, title)
     CreateControls();
     BindEventHandlers();
     LoadSettings();
-
-    for (int i = 0; i < 2500; i++)
-        m_editor->AppendText("\n");
 }
 
 void MainFrame::SetupMenus()
