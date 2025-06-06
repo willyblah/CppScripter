@@ -26,6 +26,7 @@ void CodeEditor::SetupStyle()
 
     SetEdgeMode(wxSTC_EDGE_LINE);
     SetEdgeColumn(80);
+    SetEdgeColour(wxColour(229, 228, 226));
 
     SetMarginType(0, wxSTC_MARGIN_NUMBER);
 }
